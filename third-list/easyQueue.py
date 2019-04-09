@@ -1,18 +1,53 @@
-from collections import deque
-queue = deque(maxlen=10**9)
+from sys import stdin, stdout
+class Node:
+    def __init__(self,val):
+        self.value = val
+        self.next = None # the pointer initially points to nothing
+        self.previous = None
+
+head = None
+tail = None
+length = 0
+
+def insert(value):
+    global head
+    global tail
+    global length
+    node = Node(value)
+    if head == None:
+        head = node
+        tail = node
+    else:
+        tail.next = node
+        tail = node 
+    length += 1
+
+def pop():
+    global head
+    global tail
+    global length
+    if length > 1:
+        head = head.next
+        length -= 1
+    elif length == 1:
+        head = None
+        tail = None
+        length -= 1
+        
 
 def operate(i):
     op = i[0]
     if op == "1":
-        queue.append(i[1])
+        insert(i[1])
     elif op == "2":
-        len(queue) > 0 and queue.popleft()
+        pop()
     else:
-        if len(queue) > 0:
-            print queue[0]
+        if length > 0:
+            stdout.write(head.value + "\n")
         else:
-            print "Empty!"
+            stdout.write("Empty!\n") 
 
-n = int(raw_input())
-for i in range(n):
-    operate(raw_input().split())
+n = int(stdin.readline())
+queries = [stdin.readline().split() for x in range(n)]
+for query in queries:
+    operate(query)
