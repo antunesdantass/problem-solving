@@ -7,3 +7,4 @@ for i in range(2, maxPrime + 1):
     if isPrime[i]:
         for j in range(2 * i, maxPrime + 1, i):
             isPrime[j] = False
+
