@@ -1,22 +1,6 @@
 ## Soldier and Number Game
 
-def primeFactors(n):
-    global primes
-    factors = 0
-    index = 0
-    PF = primes[index]
-    while n > 1 and PF**2 <= n:
-        while n % PF == 0:
-            n /= PF
-            factors += 1
-        index += 1
-        PF = primes[index]
-    if n > 1:
-        factors += 1
-    
-    return factors
-
-maxPrime = (10**6) * 5
+maxPrime = 10**6
 
 isPrime = [True] * (maxPrime + 1)
 isPrime[0], isPrime[1] = False, False
@@ -28,20 +12,32 @@ for i in range(2, maxPrime + 1):
             isPrime[j] = False
         primes.append(i)
 
+def factorial(x, y):
+    if x == y:
+        return 0
+    total = x
+    x -= 1
+    while x > y:
+        total *= x
+        x -= 1
+    return total
+
+def primeFactors(x):
+    global primes
+    factors = []
+    index = 0
+    PF = primes[index]
+    while (x > 1 and PF * PF <= x):
+        while (x % PF == 0):
+            x /= PF
+            factors.append(PF)
+        index += 1
+        PF = primes[index] if index < len(primes) -1 else PF + 1
+    if x > 1:
+        factors.append(x)
+    return factors
+
 nOfEntries = int(raw_input())
 entries = [map(int, raw_input().split()) for x in range(nOfEntries)]
-answers = []
-fatores = {}
-for entry in entries:
-    a = entry[0]
-    b = entry[1]
-    total = 0
-    while a > b:
-        # if a not in fatores:
-        #     fatores[a] = primeFactors(a)
-        
-        total += primeFactors(a)
-        a -= 1
-    answers.append(str(total))
-
+answers = map(lambda x: str(len(primeFactors(factorial(x[0], x[1])))), entries)
 print "\n".join(answers)
