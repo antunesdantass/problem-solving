@@ -9,18 +9,12 @@ def dfs(adj, no):
 
 def countComponents(graph):
     global vis
-    sets = []
+    counter = 0
     for no in graph:
-        dfs(graph, no)
-        contains = False
-        for i in sets:
-            if i == vis:
-                contains = True
-                break
-        if not contains:
-            sets.append(vis)
-        vis = set()
-    return len(sets)
+        if no not in vis:
+            counter += 1
+            dfs(graph, no)
+    return counter
         
 
 def buildGraph(data):
@@ -28,33 +22,33 @@ def buildGraph(data):
     for i in range(len(data)):
         for j in range(len(data[i])):
             if data[i][j] == EH_BURACO:
-                index = str(i) + str(j)
+                index = (i, j)
                 if index not in adj:
                     adj[index] = []
                 if i > 0:
                     if data[i - 1][j] == EH_BURACO:
-                        adj[index].append(str(i - 1) + str(j))
+                        adj[index].append((i - 1, j))
                     if j > 0:
                         if data[i - 1][j - 1] == EH_BURACO:
-                            adj[index].append(str(i - 1) + str(j - 1))
+                            adj[index].append((i - 1, j - 1))
                     if j < len(data[i - 1]) - 1:
                         if data[i - 1][j + 1] == EH_BURACO:
-                            adj[index].append(str(i - 1) + str(j + 1))
+                            adj[index].append((i - 1, j + 1))
                 if i < len(data) - 1:
                     if data[i + 1][j] == EH_BURACO:
-                        adj[index].append(str(i + 1) + str(j))
+                        adj[index].append((i + 1, j))
                     if j < len(data[i + 1]) - 1:
                         if data[i + 1][j + 1] == EH_BURACO:
-                            adj[index].append(str(i + 1) + str(j + 1))
+                            adj[index].append((i + 1, j + 1))
                     if j > 0:
                         if data[i + 1][j - 1] == EH_BURACO:
-                            adj[index].append(str(i + 1) + str(j - 1))
+                            adj[index].append((i + 1, j - 1))
                 if j > 0:
                     if data[i][j - 1] == EH_BURACO:
-                        adj[index].append(str(i) + str(j - 1))
+                        adj[index].append((i, j - 1))
                 if j < len(data[i]) - 1:
                     if data[i][j + 1] == EH_BURACO:
-                        adj[index].append(str(i) + str(j + 1))
+                        adj[index].append((i, j + 1))
 
     return adj
 
@@ -67,6 +61,7 @@ while m != 0:
         data.append(list(map(lambda x: x, input())))
     resultados.append(countComponents(buildGraph(data)))
     data = []
+    vis = set()
     
     m, n = list(map(int, input().split()))
     
